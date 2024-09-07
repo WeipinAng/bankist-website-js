@@ -34,7 +34,7 @@ const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 
 btnScrollTo.addEventListener('click', function (e) {
-  const s1coords = section1.getBoundingClientRect(); // relative to visible viewport (not document)
+  // const s1coords = section1.getBoundingClientRect(); // relative to visible viewport (not document)
   // console.log(s1coords);
   // console.log(e.target.getBoundingClientRect());
   // console.log('Current scroll (X/Y)', window.scrollX, window.scrollY); // between edge of viewport and top of page (document)
@@ -48,9 +48,10 @@ btnScrollTo.addEventListener('click', function (e) {
   //   s1coords.left + window.scrollX,
   //   s1coords.top + window.scrollY
   // );
-  window.scrollTo({
-    left: s1coords.left + window.scrollX,
-    top: s1coords.top + window.scrollY,
-    behavior: 'smooth',
-  });
+  // window.scrollTo({
+  //   left: s1coords.left + window.scrollX,
+  //   top: s1coords.top + window.scrollY,
+  //   behavior: 'smooth',
+  // });
+  section1.scrollIntoView({ behavior: 'smooth' });
 });
