@@ -1,11 +1,13 @@
 'use strict';
 
-// MODAL WINDOW
-
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+// MODAL WINDOW
 
 const openModal = function (e) {
   e.preventDefault();
@@ -28,10 +30,7 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-// SMOOTH SCROLLING
-
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
+// BUTTON SMOOTH SCROLLING
 
 btnScrollTo.addEventListener('click', function (e) {
   // const s1coords = section1.getBoundingClientRect(); // relative to visible viewport (not document)
@@ -54,4 +53,12 @@ btnScrollTo.addEventListener('click', function (e) {
   //   behavior: 'smooth',
   // });
   section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+// PAGE NAVIGATION
+
+document.querySelectorAll('.nav__link').forEach(function (el) {
+  el.addEventListener('click', function (e) {
+    console.log('LINK');
+  });
 });
