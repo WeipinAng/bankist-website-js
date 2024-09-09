@@ -6,6 +6,9 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
 
 // MODAL WINDOW
 
@@ -77,4 +80,25 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
       document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
     }
   }
+});
+
+// TABBED COMPONENT
+
+// event delegation #1: add event listener to common parent element
+tabsContainer.addEventListener('click', function (e) {
+  // event delegation #2: determine which element originated the event (matching strategy to ignore clicks that did not happen right on one of the links)
+  const clicked = e.target.closest('.operations__tab'); // find closest parent (take into account situation where <span> is clicked)
+
+  if (!clicked) return; // guard clause - ignore clicks that did not happen right on one of the tabs (clicks outside 'tabs' within 'tabsContainer' result in 'null')
+
+  // remove active classes for both tab and content area
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+
+  // activate tab
+  clicked.classList.add('operations__tab--active');
+  // activate content area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
 });
