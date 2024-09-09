@@ -121,3 +121,27 @@ const handleHover = function (e) {
 
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
+
+// alternative to pass arguments to handleHover() in the event handler
+// closures allow us to pass in multiple arguments, like we normally pass to a function
+// addEventListener() expects a callback (anonymous) function as its second argument which handleHover() returns
+// with the help of CLOSURES, function returned by handleHover() still has access to the arguments passed to handleHover()
+// a function always retains the access to variables that they had at the time of their creation (birth) no matter where the are called / a function always remembers all the variable available to it at its birthplace
+// https://javascript.info/closure#lexical-environment
+
+// const handleHover = function (o) {
+//   return function (e) {
+//     if (e.target.classList.contains('nav__link')) {
+//       const link = e.target;
+//       const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+//       const logo = link.closest('.nav').querySelector('img');
+
+//       siblings.forEach(el => {
+//         if (el !== link) el.style.opacity = o;
+//       });
+//       logo.style.opacity = o;
+//     }
+//   };
+// };
+// nav.addEventListener('mouseover', handleHover(0.5));
+// nav.addEventListener('mouseout', handleHover(1));
