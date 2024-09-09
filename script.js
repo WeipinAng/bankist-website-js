@@ -145,3 +145,13 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 // };
 // nav.addEventListener('mouseover', handleHover(0.5));
 // nav.addEventListener('mouseout', handleHover(1));
+
+// STICKY NAVIGATION
+
+const initialCoords = section1.getBoundingClientRect();
+
+window.addEventListener('scroll', function () {
+  window.scrollY > initialCoords.top
+    ? nav.classList.add('sticky')
+    : nav.classList.remove('sticky');
+});
