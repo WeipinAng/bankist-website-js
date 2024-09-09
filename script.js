@@ -71,6 +71,10 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   // event delegation #2: determine which element originated the event (matching strategy to ignore clicks that did not happen right on one of the links)
   if (e.target.classList.contains('nav__link')) {
     const id = e.target.getAttribute('href');
-    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+    if (id === '#') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+    }
   }
 });
