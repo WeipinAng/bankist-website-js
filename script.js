@@ -249,12 +249,16 @@ slider.style.overflow = 'visible';
 let curSlide = 0;
 const maxSlide = slides.length;
 
-slides.forEach((s, i) => (s.style.transform = `translateX(${100 * i}%)`));
-
-btnRight.addEventListener('click', function () {
-  curSlide === maxSlide - 1 ? (curSlide = 0) : curSlide++;
-
+const goToSlide = function (slide) {
   slides.forEach(
-    (s, i) => (s.style.transform = `translateX(${100 * (i - curSlide)}%)`)
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
   );
-});
+};
+goToSlide(0);
+
+const nextSlide = function () {
+  curSlide === maxSlide - 1 ? (curSlide = 0) : curSlide++;
+  goToSlide(curSlide);
+};
+
+btnRight.addEventListener('click', nextSlide);
