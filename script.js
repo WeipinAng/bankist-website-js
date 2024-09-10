@@ -193,11 +193,14 @@ headerObserver.observe(header);
 
 const allSections = document.querySelectorAll('.section'); // observe all 4 sections as multiple targets using same observer
 
+// upon loading the page, creating an IntersectionObserver object automatically fires the callback once, and the entries array contains an IntersectionObserverEntry for each observed object (so 4 sections here)
+// destructuring only grabs the first entry, ignoring the other 3, missing those intersections entirely when the page first loads and thus rendering those sections invisible if we reload on those parts of the page (until we scroll away and back)
 const revealSection = function (entries, observer) {
-  const [entry] = entries;
-  if (!entry.isIntersecting) return; // guard clause
-  entry.target.classList.remove('section--hidden'); // which particular section actually intersects the viewport
-  observer.unobserve(entry.target); // remove observer from observed target once it's no longer hidden
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return; // guard clause
+    entry.target.classList.remove('section--hidden'); // which particular section actually intersects the viewport
+    observer.unobserve(entry.target); // remove observer from observed target once it's no longer hidden
+  });
 };
 
 const sectionObserver = new IntersectionObserver(revealSection, {
