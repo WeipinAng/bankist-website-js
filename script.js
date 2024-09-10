@@ -188,3 +188,23 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 });
 
 headerObserver.observe(header);
+
+// REVEALING ELEMENTS ON SCROLL
+
+const allSections = document.querySelectorAll('.section'); // observe all 4 sections as multiple targets using same observer
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return; // guard clause
+  entry.target.classList.remove('section--hidden'); // which particular section actually intersects the viewport
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15, // shows section a little bit later after entering the viewport
+});
+
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
