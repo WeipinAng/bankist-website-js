@@ -10,6 +10,7 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
+const header = document.querySelector('.header');
 
 // MODAL WINDOW
 
@@ -150,8 +151,39 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 
 const initialCoords = section1.getBoundingClientRect();
 
-window.addEventListener('scroll', function () {
-  window.scrollY > initialCoords.top
+// scroll event
+// window.addEventListener('scroll', function () {
+//   window.scrollY > initialCoords.top
+//     ? nav.classList.add('sticky')
+//     : nav.classList.remove('sticky');
+// });
+
+// Intersection Observer API
+// const obsCallback = function (entries, observer) {
+//   // array of threshold entries, observer object itself
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   });
+// };
+// const obsOptions = {
+//   root: null, // element that target is intersecting ('null' means entire viewport)
+//   threshold: [0, 0.2], // percentage of intersection at which observer callback will be called
+// };
+// const observer = new IntersectionObserver(obsCallback, obsOptions); // call callback function each time observed/target element [section1] is intersecting 'root' [viewport] at threshold defined [0% & 20% visible]
+// observer.observe(section1);
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  console.log(entry);
+
+  !entry.isIntersecting
     ? nav.classList.add('sticky')
     : nav.classList.remove('sticky');
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
 });
+
+headerObserver.observe(header);
