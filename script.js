@@ -11,6 +11,11 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
 const header = document.querySelector('.header');
+const allSections = document.querySelectorAll('.section');
+const imgTargets = document.querySelectorAll('img[data-src]');
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
 
 // MODAL WINDOW
 
@@ -191,8 +196,6 @@ headerObserver.observe(header);
 
 // REVEALING ELEMENTS ON SCROLL
 
-const allSections = document.querySelectorAll('.section'); // observe all 4 sections as multiple targets using same observer
-
 // upon loading the page, creating an IntersectionObserver object automatically fires the callback once, and the entries array contains an IntersectionObserverEntry for each observed object (so 4 sections here)
 // destructuring only grabs the first entry, ignoring the other 3, missing those intersections entirely when the page first loads and thus rendering those sections invisible if we reload on those parts of the page (until we scroll away and back)
 const revealSection = function (entries, observer) {
@@ -208,14 +211,13 @@ const sectionObserver = new IntersectionObserver(revealSection, {
   threshold: 0.15, // shows section a little bit later after entering the viewport
 });
 
+// observe all 4 sections as multiple targets using same observer
 allSections.forEach(function (section) {
   sectionObserver.observe(section);
   section.classList.add('section--hidden');
 });
 
 // LAZY LOADING IMAGES
-
-const imgTargets = document.querySelectorAll('img[data-src]');
 
 const loadImg = function (entries, observer) {
   entries.forEach(entry => {
@@ -237,3 +239,22 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 imgTargets.forEach(img => imgObserver.observe(img));
+
+// SLIDER COMPONENT
+
+const slider = document.querySelector('.slider');
+slider.style.transform = 'scale(0.4) translateX(-800px)';
+slider.style.overflow = 'visible';
+
+let curSlide = 0;
+const maxSlide = slides.length;
+
+slides.forEach((s, i) => (s.style.transform = `translateX(${100 * i}%)`));
+
+btnRight.addEventListener('click', function () {
+  curSlide === maxSlide - 1 ? (curSlide = 0) : curSlide++;
+
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - curSlide)}%)`)
+  );
+});
