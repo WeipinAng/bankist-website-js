@@ -197,6 +197,7 @@ const revealSection = function (entries, observer) {
   const [entry] = entries;
   if (!entry.isIntersecting) return; // guard clause
   entry.target.classList.remove('section--hidden'); // which particular section actually intersects the viewport
+  observer.unobserve(entry.target); // remove observer from observed target once it's no longer hidden
 };
 
 const sectionObserver = new IntersectionObserver(revealSection, {
