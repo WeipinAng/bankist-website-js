@@ -242,10 +242,6 @@ imgTargets.forEach(img => imgObserver.observe(img));
 
 // SLIDER COMPONENT
 
-const slider = document.querySelector('.slider');
-slider.style.transform = 'scale(0.4) translateX(-800px)';
-slider.style.overflow = 'visible';
-
 let curSlide = 0;
 const maxSlide = slides.length;
 
@@ -260,5 +256,10 @@ const nextSlide = function () {
   curSlide === maxSlide - 1 ? (curSlide = 0) : curSlide++;
   goToSlide(curSlide);
 };
+const prevSlide = function () {
+  curSlide === 0 ? (curSlide = maxSlide - 1) : curSlide--;
+  goToSlide(curSlide);
+};
 
 btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
