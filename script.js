@@ -172,10 +172,10 @@ const initialCoords = section1.getBoundingClientRect();
 // const observer = new IntersectionObserver(obsCallback, obsOptions); // call callback function each time observed/target element [section1] is intersecting 'root' [viewport] at threshold defined [0% & 20% visible]
 // observer.observe(section1);
 
+const navHeight = nav.getBoundingClientRect().height; // take into account responsive site where size of all elements will change (updates dynamically regardless of size of viewport)
+
 const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entry);
-
   !entry.isIntersecting
     ? nav.classList.add('sticky')
     : nav.classList.remove('sticky');
@@ -184,6 +184,7 @@ const stickyNav = function (entries) {
 const headerObserver = new IntersectionObserver(stickyNav, {
   root: null,
   threshold: 0,
+  rootMargin: `-${navHeight}px`, // '-px' shrinks observed range of 'root'; height of navigation (90px by default)
 });
 
 headerObserver.observe(header);
