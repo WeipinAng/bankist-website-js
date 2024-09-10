@@ -218,15 +218,16 @@ allSections.forEach(function (section) {
 const imgTargets = document.querySelectorAll('img[data-src]');
 
 const loadImg = function (entries, observer) {
-  const [entry] = entries; // only 1 entry for 1 threshold
-  if (!entry.isIntersecting) return;
-  entry.target.src = entry.target.dataset.src; // replace src (placeholder image) with data-src (high-resolution image), js does image loading behind the scenes (emit 'load' event once finish loading the image)
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.src = entry.target.dataset.src; // replace src (placeholder image) with data-src (high-resolution image), js does image loading behind the scenes (emit 'load' event once finish loading the image)
 
-  // remove blurry filter only when image loading is done (take into account when network speed is slow)
-  entry.target.addEventListener('load', function () {
-    entry.target.classList.remove('lazy-img');
+    // remove blurry filter only when image loading is done (take into account when network speed is slow)
+    entry.target.addEventListener('load', function () {
+      entry.target.classList.remove('lazy-img');
+    });
+    observer.unobserve(entry.target);
   });
-  observer.unobserve(entry.target);
 };
 
 const imgObserver = new IntersectionObserver(loadImg, {
