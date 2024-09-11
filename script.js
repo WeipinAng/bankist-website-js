@@ -13,10 +13,6 @@ const nav = document.querySelector('.nav');
 const header = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
 const imgTargets = document.querySelectorAll('img[data-src]');
-const slides = document.querySelectorAll('.slide');
-const btnLeft = document.querySelector('.slider__btn--left');
-const btnRight = document.querySelector('.slider__btn--right');
-const dotContainer = document.querySelector('.dots');
 
 // MODAL WINDOW
 
@@ -243,77 +239,90 @@ imgTargets.forEach(img => imgObserver.observe(img));
 
 // SLIDER COMPONENT
 
-let curSlide = 0;
-const maxSlide = slides.length;
+// extract into a single function to not pollute global namespace (good practice)
+const slider = function () {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotContainer = document.querySelector('.dots');
 
-const createDots = function () {
-  slides.forEach(function (_, i) {
-    dotContainer.insertAdjacentHTML(
-      'beforeend',
-      `<button class="dots__dot" data-slide="${i}"></button>`
+  let curSlide = 0;
+  const maxSlide = slides.length;
+
+  const createDots = function () {
+    slides.forEach(function (_, i) {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  };
+
+  const activateDot = function (slide) {
+    document
+      .querySelectorAll('.dots__dot')
+      .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  };
+
+  const goToSlide = function (slide) {
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
     );
+  };
+
+  const nextSlide = function () {
+    curSlide === maxSlide - 1 ? (curSlide = 0) : curSlide++;
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+  const prevSlide = function () {
+    curSlide === 0 ? (curSlide = maxSlide - 1) : curSlide--;
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+
+  const init = function () {
+    goToSlide(0);
+    createDots();
+    activateDot(0);
+  };
+  init();
+
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  // alternative of a single function to slide to both sides (using modulus operator and closure concept)
+  // const slideBothSides = function (o) {
+  //   return function () {
+  //     curSlide = o
+  //       ? (curSlide + 1) % maxSlide // next slide
+  //       : (curSlide + maxSlide - 1) % maxSlide; // prev slide
+  //     goToSlide(curSlide);
+  //     activateDot(curSlide);
+  //   };
+  // };
+
+  // btnRight.addEventListener('click', slideBothSides(true));
+  // btnLeft.addEventListener('click', slideBothSides(false));
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') prevSlide();
+    e.key === 'ArrowRight' && nextSlide(); // short-circuiting approach
+  });
+
+  // event delegation #1: add event listener to common parent element
+  dotContainer.addEventListener('click', function (e) {
+    // event delegation #2: determine which element originated the event (matching strategy to ignore clicks that did not happen right on one of the dots)
+    if (e.target.classList.contains('dots__dot')) {
+      const { slide } = e.target.dataset;
+      goToSlide(slide);
+      // goToSlide(e.target.dataset.slide);
+      activateDot(slide);
+    }
   });
 };
-createDots();
-
-const activateDot = function (slide) {
-  document
-    .querySelectorAll('.dots__dot')
-    .forEach(dot => dot.classList.remove('dots__dot--active'));
-
-  document
-    .querySelector(`.dots__dot[data-slide="${slide}"]`)
-    .classList.add('dots__dot--active');
-};
-activateDot(0);
-
-const goToSlide = function (slide) {
-  slides.forEach(
-    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
-  );
-};
-goToSlide(0);
-
-const nextSlide = function () {
-  curSlide === maxSlide - 1 ? (curSlide = 0) : curSlide++;
-  goToSlide(curSlide);
-  activateDot(curSlide);
-};
-const prevSlide = function () {
-  curSlide === 0 ? (curSlide = maxSlide - 1) : curSlide--;
-  goToSlide(curSlide);
-  activateDot(curSlide);
-};
-
-btnRight.addEventListener('click', nextSlide);
-btnLeft.addEventListener('click', prevSlide);
-
-// alternative of a single function to slide to both sides (using modulus operator and closure concept)
-// const slideBothSides = function (o) {
-//   return function () {
-//     curSlide = o
-//       ? (curSlide + 1) % maxSlide // next slide
-//       : (curSlide + maxSlide - 1) % maxSlide; // prev slide
-//     goToSlide(curSlide);
-//     activateDot(curSlide);
-//   };
-// };
-
-// btnRight.addEventListener('click', slideBothSides(true));
-// btnLeft.addEventListener('click', slideBothSides(false));
-
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'ArrowLeft') prevSlide();
-  e.key === 'ArrowRight' && nextSlide(); // short-circuiting approach
-});
-
-// event delegation #1: add event listener to common parent element
-dotContainer.addEventListener('click', function (e) {
-  // event delegation #2: determine which element originated the event (matching strategy to ignore clicks that did not happen right on one of the dots)
-  if (e.target.classList.contains('dots__dot')) {
-    const { slide } = e.target.dataset;
-    goToSlide(slide);
-    // goToSlide(e.target.dataset.slide);
-    activateDot(slide);
-  }
-});
+slider();
