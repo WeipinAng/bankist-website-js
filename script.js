@@ -292,3 +292,13 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'ArrowLeft') prevSlide();
   e.key === 'ArrowRight' && nextSlide(); // short-circuiting approach
 });
+
+// event delegation #1: add event listener to common parent element
+dotContainer.addEventListener('click', function (e) {
+  // event delegation #2: determine which element originated the event (matching strategy to ignore clicks that did not happen right on one of the dots)
+  if (e.target.classList.contains('dots__dot')) {
+    const { slide } = e.target.dataset;
+    goToSlide(slide);
+    // goToSlide(e.target.dataset.slide);
+  }
+});
