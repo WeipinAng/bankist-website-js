@@ -318,10 +318,10 @@ const slider = function () {
   dotContainer.addEventListener('click', function (e) {
     // event delegation #2: determine which element originated the event (matching strategy to ignore clicks that did not happen right on one of the dots)
     if (e.target.classList.contains('dots__dot')) {
-      const { slide } = e.target.dataset;
-      goToSlide(slide);
+      curSlide = +e.target.dataset.slide;
+      goToSlide(curSlide);
       // goToSlide(e.target.dataset.slide);
-      activateDot(slide);
+      activateDot(curSlide);
     }
   });
 };
