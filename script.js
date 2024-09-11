@@ -263,3 +263,16 @@ const prevSlide = function () {
 
 btnRight.addEventListener('click', nextSlide);
 btnLeft.addEventListener('click', prevSlide);
+
+// alternative of a single function to slide to both sides (using modulus operator and closure concept)
+// const slideBothSides = function (o) {
+//   return function () {
+//     curSlide = o
+//       ? (curSlide + 1) % maxSlide // next slide
+//       : (curSlide + maxSlide - 1) % maxSlide; // prev slide
+//     goToSlide(curSlide);
+//   };
+// };
+
+// btnRight.addEventListener('click', slideBothSides(true));
+// btnLeft.addEventListener('click', slideBothSides(false));
