@@ -276,3 +276,8 @@ btnLeft.addEventListener('click', prevSlide);
 
 // btnRight.addEventListener('click', slideBothSides(true));
 // btnLeft.addEventListener('click', slideBothSides(false));
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowLeft') prevSlide();
+  e.key === 'ArrowRight' && nextSlide(); // short-circuiting approach
+});
